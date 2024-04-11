@@ -72,13 +72,20 @@ public class ProductServiceImple implements ICRUDProductService, IFilterProductS
 	@Override
 	public void updateById(int id, Product product) throws Exception {
 		// TODO Auto-generated method stub
+		Product updateProduct = retrieveById(id);
 		
+		updateProduct.setTitle(product.getTitle());
+		updateProduct.setDescription(product.getDescription());
+		updateProduct.setQuantity(product.getQuantity());
+		updateProduct.setPrice(product.getPrice());
 	}
 
 	@Override
 	public Product deleteById(int id) throws Exception {
 		// TODO Auto-generated method stub
-		return null;
+		Product deleteProduct = retrieveById(id);
+		allProduct.remove(deleteProduct);
+		return deleteProduct;
 	}
 	
 	
