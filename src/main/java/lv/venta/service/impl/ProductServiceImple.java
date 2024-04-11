@@ -1,6 +1,7 @@
 package lv.venta.service.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.springframework.stereotype.Service;
 
@@ -10,6 +11,8 @@ import lv.venta.service.IFilterProductService;
 
 @Service
 public class ProductServiceImple implements ICRUDProductService, IFilterProductService{
+	
+	private ArrayList<Product> allProducts = new ArrayList<>(Arrays.asList(new Product("Abols", "Zals", 0.69f, 5)));
 
 	private ArrayList<Product> allProduct = new ArrayList<>();
 	@Override
@@ -91,7 +94,7 @@ public class ProductServiceImple implements ICRUDProductService, IFilterProductS
 				return tempP;
 			}
 		}
-		throw new Exception("Product with " + id + "not found");
+		throw new Exception("Product with " + id + " not found");
 	}
 
 	@Override
