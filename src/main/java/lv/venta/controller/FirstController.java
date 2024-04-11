@@ -16,11 +16,11 @@ import lv.venta.model.Product;
 
 @Controller
 public class FirstController {
-	Product myProduct1 = new Product("Abols", "Zals", 0.69f, 5);
+	/*Product myProduct1 = new Product("Abols", "Zals", 0.69f, 5);
 	Product myProduct2 = new Product("Zemene", "dzeltena", 0.25f, 3);
 	Product myProduct3 = new Product("Zars", "Bruns", 1.29f, 2);
 	ArrayList<Product> allProduct = new ArrayList<>(Arrays.asList(myProduct1,myProduct2, myProduct3 ));
-	
+	*/
 	@GetMapping("/hello")//localhost:8080/hello
 	public String getHello() {
 		System.out.println("Hello from Spring boot");
