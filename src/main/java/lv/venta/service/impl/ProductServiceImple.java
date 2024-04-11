@@ -12,9 +12,8 @@ import lv.venta.service.IFilterProductService;
 @Service
 public class ProductServiceImple implements ICRUDProductService, IFilterProductService{
 	
-	private ArrayList<Product> allProducts = new ArrayList<>(Arrays.asList(new Product("Abols", "Zals", 0.69f, 5)));
-
-	private ArrayList<Product> allProduct = new ArrayList<>();
+	private ArrayList<Product> allProduct = new ArrayList<>(Arrays.asList(new Product("Abols", "Zals", 0.69f, 5)));
+	
 	@Override
 	public ArrayList<Product> filterProductByPriceThreshold(float priceThreshold) throws Exception {
 		// TODO Auto-generated method stub
