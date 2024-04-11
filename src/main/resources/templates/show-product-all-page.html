@@ -2,7 +2,7 @@
 
 <body>
 	<table>
-		<tr th:each="tempPr: ${myobjs}">
+		<tr th:each="tempPr: ${mylist}">
 				<td th:text = "${tempPr.getId()}"></td>
 				<td th:text = "${tempPr.getTitle()}"></td>
 				<td th:text = "${tempPr.getDescription()}"></td>
