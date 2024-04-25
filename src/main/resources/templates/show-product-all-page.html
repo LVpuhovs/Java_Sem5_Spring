@@ -1,6 +1,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <body>
+	<p th:text = "${title}"></p>
 	<table>
 		<tr th:each="tempPr: ${mylist}">
 				<td th:text = "${tempPr.getId()}"></td>

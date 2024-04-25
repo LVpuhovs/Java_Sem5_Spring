@@ -50,7 +50,7 @@ public class ProductServiceImple implements ICRUDProductService, IFilterProductS
 		ArrayList<Product> filteredProducts = new ArrayList<>();
 		
 		for(Product tempP: allProduct) {
-			if(tempP.getTitle().contains(searchText) || tempP.getDescription().contains(searchText)) {
+			if(tempP.getTitle().toLowerCase().contains(searchText) || tempP.getDescription().toLowerCase().contains(searchText)) {
 				filteredProducts.add(tempP);
 			}
 		}
