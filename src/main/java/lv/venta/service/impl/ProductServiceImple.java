@@ -114,6 +114,18 @@ public class ProductServiceImple implements ICRUDProductService, IFilterProductS
 		allProduct.remove(deleteProduct);
 		return deleteProduct;
 	}
+
+	@Override
+	public float calculateTotalProductValue() throws Exception {
+		// TODO Auto-generated method stub
+		if(allProduct.isEmpty())throw new Exception("No Products");
+		float sum = 0;
+		
+		for(Product tempP: allProduct) {
+			sum += tempP.getPrice() * tempP.getQuantity();
+		}
+		return sum;
+	}
 	
 	
 }
