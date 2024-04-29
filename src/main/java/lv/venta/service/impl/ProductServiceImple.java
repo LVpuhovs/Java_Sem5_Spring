@@ -3,30 +3,31 @@ package lv.venta.service.impl;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lv.venta.model.Product;
+import lv.venta.repo.IProductRepo;
 import lv.venta.service.ICRUDProductService;
 import lv.venta.service.IFilterProductService;
 
 @Service
 public class ProductServiceImple implements ICRUDProductService, IFilterProductService{
 	
-	private ArrayList<Product> allProduct = new ArrayList<>(Arrays.asList(new Product("Abols", "Zals", 0.69f, 5)));
+	@Autowired
+	private IProductRepo productRepo;
+	
+	
 	
 	@Override
 	public ArrayList<Product> filterProductByPriceThreshold(float priceThreshold) throws Exception {
 		// TODO Auto-generated method stub
 		if(priceThreshold <= 0 || priceThreshold > 10000) throw new Exception("Wrong price treshold");
 		
-		ArrayList<Product> filteredProducts = new ArrayList<>();
+		ArrayList<Product> filteredProduct = productRepo.findByPriceLessThanEqual(priceThreshold);
 		
-		for(Product tempP: allProduct) {
-			if(tempP.getPrice() <= priceThreshold) {
-				filteredProducts.add(tempP);
-			}
-		}
-		return filteredProducts;
+		
+		return filteredProduct;
 	}
 
 	@Override
@@ -34,12 +35,8 @@ public class ProductServiceImple implements ICRUDProductService, IFilterProductS
 		// TODO Auto-generated method stub
 		if(quantityThreshold < 0 || quantityThreshold > 100) throw new Exception("Wrong quantity theshold");
 		
-		ArrayList<Product> filteredProducts =  new ArrayList<>();
-		for(Product tempP: allProduct) {
-			if(tempP.getPrice() <= quantityThreshold) {
-				filteredProducts.add(tempP);
-			}
-		}
+		ArrayList<Product> filteredProducts =  productRepo.findByQuantityLessThanEqual(quantityThreshold);
+		
 		return filteredProducts;
 	}
 
@@ -47,13 +44,8 @@ public class ProductServiceImple implements ICRUDProductService, IFilterProductS
 	public ArrayList<Product> searchByTitleOrDescription(String searchText) throws Exception {
 		// TODO Auto-generated method stub
 		if (searchText == null) throw new Exception("Wrong");
-		ArrayList<Product> filteredProducts = new ArrayList<>();
+		ArrayList<Product> filteredProducts = productRepo.findByTitleLikeIgnoreCaseOrDescriptionLikeIgnoreCase(searchText, searchText);
 		
-		for(Product tempP: allProduct) {
-			if(tempP.getTitle().toLowerCase().contains(searchText) || tempP.getDescription().toLowerCase().contains(searchText)) {
-				filteredProducts.add(tempP);
-			}
-		}
 		return filteredProducts;
 		
 	}
@@ -64,34 +56,36 @@ public class ProductServiceImple implements ICRUDProductService, IFilterProductS
 		if(product == null) throw new Exception("wrong product input");
 		
 		
+		Product productFromDB = productRepo.findByTitleAndDescriptionAndPrice(product.getTitle(),product.getDescription(),product.getPrice());
 		
-		for(Product tempP: allProduct) {
-			if(tempP.getTitle().equals(product.getTitle()) && tempP.getDescription().equals(product.getDescription()) && tempP.getPrice() == product.getPrice()) {
-				tempP.setQuantity(tempP.getQuantity() + product.getQuantity());
-				return tempP;
-			}
+		if(productFromDB != null) {
+				
+			productFromDB.setQuantity(productFromDB.getQuantity() + product.getQuantity());
+			productRepo.save(productFromDB);
+			
+			return productFromDB;
 		}
-		Product newProduct = new Product(product.getTitle(), product.getDescription(), product.getPrice(), product.getQuantity());
-		allProduct.add(newProduct);
-		return newProduct;
+	
+		
+		Product storedProduct = productRepo.save(product);
+		return storedProduct;
 	}
 
 	@Override
 	public ArrayList<Product> retrieveAll() throws Exception {
 		// TODO Auto-generated method stub
-		if(allProduct.isEmpty()) throw new Exception("List is empty");
+		if(productRepo.count() == 0) throw new Exception("List is empty");
 		
-		return allProduct;
+		return (ArrayList<Product>) productRepo.findAll();
 	}
 
 	@Override
 	public Product retrieveById(int id) throws Exception {
 		// TODO Auto-generated method stub
 		if( id < 0) throw new Exception("id should be positive");
-		for(Product tempP: allProduct) {
-			if(tempP.getId() == id) {
-				return tempP;
-			}
+		
+		if(productRepo.existsById(id)) {
+			return productRepo.findById(id).get();
 		}
 		throw new Exception("Product with " + id + " not found");
 	}
@@ -105,13 +99,14 @@ public class ProductServiceImple implements ICRUDProductService, IFilterProductS
 		updateProduct.setDescription(product.getDescription());
 		updateProduct.setQuantity(product.getQuantity());
 		updateProduct.setPrice(product.getPrice());
+		productRepo.save(updateProduct);
 	}
 
 	@Override
 	public Product deleteById(int id) throws Exception {
 		// TODO Auto-generated method stub
 		Product deleteProduct = retrieveById(id);
-		allProduct.remove(deleteProduct);
+		productRepo.delete(deleteProduct);
 		return deleteProduct;
 	}
 
