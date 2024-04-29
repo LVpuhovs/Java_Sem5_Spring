@@ -113,13 +113,9 @@ public class ProductServiceImple implements ICRUDProductService, IFilterProductS
 	@Override
 	public float calculateTotalProductValue() throws Exception {
 		// TODO Auto-generated method stub
-		if(allProduct.isEmpty())throw new Exception("No Products");
-		float sum = 0;
-		
-		for(Product tempP: allProduct) {
-			sum += tempP.getPrice() * tempP.getQuantity();
-		}
-		return sum;
+		if(productRepo.count() == 0)throw new Exception("No Products");
+		float result = productRepo.calculateTotalValueOfDBProducts();
+		return result;
 	}
 	
 	
