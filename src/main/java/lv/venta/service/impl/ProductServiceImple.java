@@ -44,7 +44,7 @@ public class ProductServiceImple implements ICRUDProductService, IFilterProductS
 	public ArrayList<Product> searchByTitleOrDescription(String searchText) throws Exception {
 		// TODO Auto-generated method stub
 		if (searchText == null) throw new Exception("Wrong");
-		ArrayList<Product> filteredProducts = productRepo.findByTitleLikeIgnoreCaseOrDescriptionLikeIgnoreCase(searchText, searchText);
+		ArrayList<Product> filteredProducts = productRepo.findByTitleIgnoreCaseContainingOrDescriptionIgnoreCaseContaining(searchText, searchText);
 		
 		return filteredProducts;
 		

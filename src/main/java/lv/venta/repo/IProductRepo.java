@@ -15,7 +15,7 @@ public interface IProductRepo extends CrudRepository<Product, Integer>{
 		
 		ArrayList<Product> findByQuantityLessThanEqual(int quantityThreshold);
 		
-		ArrayList<Product> findByTitleLikeIgnoreCaseOrDescriptionLikeIgnoreCase(String searchText1, String searchText2);
+		ArrayList<Product> findByTitleIgnoreCaseContainingOrDescriptionIgnoreCaseContaining(String searchText1, String searchText2);
 		
 		@Query(nativeQuery = true, value = "SELECT SUM(PRICE * QUANTITY) FROM PRODUCT TABLE")
 		float calculateTotalValueOfDBProducts();
