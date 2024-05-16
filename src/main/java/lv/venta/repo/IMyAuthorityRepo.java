@@ -1,5 +1,10 @@
 package lv.venta.repo;
 
-public interface IMyAuthorityRepo {
+import org.springframework.data.repository.CrudRepository;
+
+import lv.venta.model.MyAuthority;
+import lv.venta.model.MyUser;
+
+public interface IMyAuthorityRepo extends CrudRepository<MyAuthority, Integer> {
 
 }
