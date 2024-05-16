@@ -2,6 +2,8 @@ package lv.venta.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
@@ -13,39 +15,21 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+import lv.venta.service.impl.MyUserDetailServiceImpl;
+
 @Configuration
 @EnableWebSecurity
 public class webSecurityConfig {
 	
 	@Bean
-	public UserDetailsService testUsers() {
+	public AuthenticationProvider linkWithDB() {
 		PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-		UserDetails u1Details = 
-				User
-				.builder()
-				.username("admin")
-				.password(encoder.encode("123456"))
-				.authorities("ADMIN")
-				.build();
+		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+		provider.setPasswordEncoder(encoder);
+		provider.setUserDetailsService(new MyUserDetailServiceImpl());
 		
-		UserDetails u2Details = 
-				User
-				.builder()
-				.username("zigis")
-				.password(encoder.encode("4202024"))
-				.authorities("USER")
-				.build();
+		return provider;
 		
-		
-		UserDetails u3Details = 
-				User
-				.builder()
-				.username("ivo")
-				.password(encoder.encode("098765"))
-				.authorities("USER", "ADMIN")
-				.build();
-		
-		return new InMemoryUserDetailsManager(u1Details, u2Details, u3Details);
 	}
 	@Bean
 	public SecurityFilterChain configureEndpoints(HttpSecurity http) throws Exception {
